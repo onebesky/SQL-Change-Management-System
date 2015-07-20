@@ -14,7 +14,7 @@ use yii\widgets\Breadcrumbs;
     <div class="wrapper">
         <!-- header logo: style can be found in header.less -->
         <header class="main-header">
-            <a href="<?php echo Yii::getAlias('@frontendUrl') ?>" class="logo">
+            <a href="<?php echo Yii::getAlias('@backendUrl') ?>" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <?php echo Yii::$app->name ?>
             </a>
@@ -68,13 +68,13 @@ use yii\widgets\Breadcrumbs;
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<?php echo Yii::$app->user->identity->userProfile->getAvatar() ?: '/img/anonymous.jpg' ?>" class="user-image">
+                                <img src="<?php echo '/img/anonymous.jpg' ?>" class="user-image">
                                 <span><?php echo Yii::$app->user->identity->username ?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header light-blue">
-                                    <img src="<?php echo Yii::$app->user->identity->userProfile->getAvatar() ?: '/img/anonymous.jpg' ?>" class="img-circle" alt="User Image" />
+                                    <img src="<?php echo '/img/anonymous.jpg' ?>" class="img-circle" alt="User Image" />
                                     <p>
                                         <?php Yii::$app->user->identity->username ?>
                                         <small>
@@ -83,9 +83,7 @@ use yii\widgets\Breadcrumbs;
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <div class="pull-left">
-                                        <?php echo Html::a(Yii::t('backend', 'Profile'), ['/sign-in/profile'], ['class'=>'btn btn-default btn-flat']) ?>
-                                    </div>
+
                                     <div class="pull-left">
                                         <?php echo Html::a(Yii::t('backend', 'Account'), ['/sign-in/account'], ['class'=>'btn btn-default btn-flat']) ?>
                                     </div>
@@ -109,7 +107,7 @@ use yii\widgets\Breadcrumbs;
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="<?php echo Yii::$app->user->identity->userProfile->getAvatar() ?: '/img/anonymous.jpg' ?>" class="img-circle" />
+                        <img src="<?php echo '/img/anonymous.jpg' ?>" class="img-circle" />
                     </div>
                     <div class="pull-left info">
                         <p><?php echo Yii::t('backend', 'Hello, {username}', ['username'=>Yii::$app->user->identity->getPublicIdentity()]) ?></p>
@@ -168,9 +166,9 @@ use yii\widgets\Breadcrumbs;
                                     ]
                                 ],
                                 ['label'=>Yii::t('backend', 'Key-Value Storage'), 'url'=>['/key-storage/index'], 'icon'=>'<i class="fa fa-angle-double-right"></i>'],
-                                ['label'=>Yii::t('backend', 'File Storage'), 'url'=>['/file-storage/index'], 'icon'=>'<i class="fa fa-angle-double-right"></i>'],
+                                
                                 ['label'=>Yii::t('backend', 'Cache'), 'url'=>['/cache/index'], 'icon'=>'<i class="fa fa-angle-double-right"></i>'],
-                                ['label'=>Yii::t('backend', 'File Manager'), 'url'=>['/file-manager/index'], 'icon'=>'<i class="fa fa-angle-double-right"></i>'],
+                                
                                 [
                                     'label'=>Yii::t('backend', 'System Information'),
                                     'url'=>['/system-information/index'],

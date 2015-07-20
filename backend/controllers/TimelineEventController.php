@@ -16,6 +16,7 @@ class TimelineEventController extends Controller
      * Lists all TimelineEvent models.
      * @return mixed
      */
+    
     public function actionIndex()
     {
         $searchModel = new TimelineEventSearch();

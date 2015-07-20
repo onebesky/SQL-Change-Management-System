@@ -32,6 +32,8 @@ class m150414_195800_timeline_event extends Migration
                 ['frontend', 'user', 'signup', json_encode(['publicIdentity' => 'user', 'userId' => 3, 'created_at' => time()]), time()]
             ]
         );
+        
+        
     }
 
     public function down()

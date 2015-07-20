@@ -1,11 +1,11 @@
 <?php
 $config = [
-    'name'=>'Yii2 Starter Kit',
+    'name'=>'SQL Audit',
     'vendorPath'=>dirname(dirname(__DIR__)).'/vendor',
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
     'sourceLanguage'=>'en-US',
     'language'=>'en-US',
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'logger'],
     'components' => [
 
         'authManager' => [
@@ -33,7 +33,9 @@ $config = [
         'formatter'=>[
             'class'=>'yii\i18n\Formatter'
         ],
-
+        'guid' => [
+            'class' => 'common\components\guid\GUniqueId'
+        ],
         'glide' => [
             'class' => 'trntv\glide\components\Glide',
             'sourcePath' => '@storage/web/source',
@@ -52,7 +54,7 @@ $config = [
             ]
         ],
 
-        'db'=>[
+        /*'db'=>[
             'class'=>'yii\db\Connection',
             'dsn' => getenv('DB_DSN'),
             'username' => getenv('DB_USERNAME'),
@@ -60,6 +62,11 @@ $config = [
             'tablePrefix' => getenv('DB_TABLE_PREFIX'),
             'charset' => 'utf8',
             'enableSchemaCache' => YII_ENV_PROD,
+        ],*/
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'sqlite:' . realpath(__DIR__.'/../../') . '/data/sqlaudit.db',
+            'charset' => 'utf8',
         ],
 
         'log' => [
@@ -78,7 +85,9 @@ $config = [
                 ]
             ],
         ],
-
+        'logger' => [
+            'class' => 'common\components\Logger',
+        ],
         'i18n' => [
             'translations' => [
                 'app'=>[
@@ -130,12 +139,6 @@ $config = [
             ],
             require(Yii::getAlias('@backend/config/_urlManager.php'))
         ),
-        'urlManagerFrontend' => \yii\helpers\ArrayHelper::merge(
-            [
-                'hostInfo'=>Yii::getAlias('@frontendUrl')
-            ],
-            require(Yii::getAlias('@frontend/config/_urlManager.php'))
-        ),
         'urlManagerStorage' => \yii\helpers\ArrayHelper::merge(
             [
                 'hostInfo'=>Yii::getAlias('@storageUrl')
@@ -148,9 +151,9 @@ $config = [
         'robotEmail' => getenv('ROBOT_EMAIL'),
         'availableLocales'=>[
             'en-US'=>'English (US)',
-            'ru-RU'=>'Русский (РФ)',
-            'uk-UA'=>'Українська (Україна)',
-            'es' => 'Español'
+            //'ru-RU'=>'Русский (РФ)',
+            //'uk-UA'=>'Українська (Україна)',
+            //'es' => 'Español'
         ],
     ],
 ];

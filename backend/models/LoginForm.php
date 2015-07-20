@@ -72,10 +72,6 @@ class LoginForm extends Model
         }
         $duration = $this->rememberMe ? Time::SECONDS_IN_A_MONTH : 0;
         if (Yii::$app->user->login($this->getUser(), $duration)) {
-            if (!Yii::$app->user->can('loginToBackend')) {
-                Yii::$app->user->logout();
-                throw new ForbiddenHttpException;
-            }
             return true;
         }
 

@@ -13,8 +13,6 @@ class AppController extends Controller
 {
     public $writablePaths = [
         '@common/runtime',
-        '@frontend/runtime',
-        '@frontend/web/assets',
         '@backend/runtime',
         '@backend/web/assets',
         '@storage/cache',
@@ -23,7 +21,6 @@ class AppController extends Controller
 
     public $executablePaths = [
         '@backend/yii',
-        '@frontend/yii',
         '@console/yii',
     ];
 

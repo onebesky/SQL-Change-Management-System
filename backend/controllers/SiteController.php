@@ -31,8 +31,8 @@ class SiteController extends \yii\web\Controller
     {
         $model = new FormModel([
             'keys' => [
-                'frontend.maintenance' => [
-                    'label' => Yii::t('backend', 'Frontend maintenance mode'),
+                'backend.maintenance' => [
+                    'label' => Yii::t('backend', 'Maintenance mode'),
                     'type' => FormModel::TYPE_DROPDOWN,
                     'items' => [
                         'disabled' => Yii::t('backend', 'Disabled'),
@@ -75,5 +75,9 @@ class SiteController extends \yii\web\Controller
         }
 
         return $this->render('settings', ['model' => $model]);
+    }
+    
+    public function actionTest(){
+        return $this->render('test');
     }
 }

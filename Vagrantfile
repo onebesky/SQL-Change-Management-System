@@ -5,9 +5,8 @@
 require 'yaml'
 options = YAML.load_file File.join(File.dirname(__FILE__), 'vagrant.yaml')
 domains = [
-    "yii2-starter-kit.dev",
-    "backend.yii2-starter-kit.dev",
-    "storage.yii2-starter-kit.dev"
+    "sqlaudit.dev",
+    "storage.sqlaudit.dev",
 ]
 packages = [
     "php5-cli",
@@ -18,10 +17,12 @@ packages = [
     "php5-curl",
     "php5-mcrypt",
     "php5-xdebug",
+    "php5-sqlite",
     "nginx",
     "mysql-server-5.6",
     "hhvm",
-    "git"
+    "git",
+    "npm"
 ]
 
 Vagrant.configure(2) do |config|

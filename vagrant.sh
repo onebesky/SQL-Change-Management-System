@@ -52,6 +52,10 @@ else
 fi
 ${composer} config --global github-oauth.github.com ${github_token}
 
+mkdir /var/www/vendor
+chown vagrant /var/www/vendor
+sudo composer global require "fxp/composer-asset-plugin:1.0.0"
+
 # init application
 if [ ! -d /var/www/vendor ]; then
     cd /var/www && ${composer} install --prefer-dist --optimize-autoloader
@@ -59,22 +63,28 @@ else
     cd /var/www && ${composer} update --prefer-dist --optimize-autoloader
 fi
 
+# Configuring application
+echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root'" | mysql -uroot -proot
+echo "FLUSH PRIVILEGES'" | mysql -uroot -proot
+echo "CREATE DATABASE IF NOT EXISTS \`sql_audit\` CHARACTER SET utf8 COLLATE utf8_unicode_ci" | mysql -uroot -proot
+echo "CREATE DATABASE IF NOT EXISTS \`sql_audit_tests\` CHARACTER SET utf8 COLLATE utf8_unicode_ci" | mysql -uroot -proot
+
 cp /var/www/.env.dist /var/www/.env
 php /var/www/console/yii app/setup
 
 # create nginx config
-if [ ! -f /etc/nginx/sites-enabled/yii2-starter-kit.dev ]; then
+if [ ! -f /etc/nginx/sites-enabled/sql-audit.dev ]; then
     cp /var/www/vhost.conf.dist /var/www/vhost.conf
-    sudo ln -s /var/www/vhost.conf /etc/nginx/sites-enabled/yii2-starter-kit.dev
+    sudo ln -s /var/www/vhost.conf /etc/nginx/sites-enabled/sql-audit.dev
 fi
 
-# Configuring application
-echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root'" | mysql -uroot -proot
-echo "FLUSH PRIVILEGES'" | mysql -uroot -proot
-echo "CREATE DATABASE IF NOT EXISTS \`yii2-starter-kit\` CHARACTER SET utf8 COLLATE utf8_unicode_ci" | mysql -uroot -proot
 
-php /var/www/console/yii migrate up --interactive=0
+php /var/www/console/yii migrate --interactive=0
 php /var/www/console/yii rbac/init
+
+sudo npm install -g bower
+cd /var/www
+bower install
 
 sudo service mysql restart
 sudo service php5-fpm restart

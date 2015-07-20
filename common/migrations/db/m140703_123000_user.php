@@ -13,13 +13,15 @@ class m140703_123000_user extends Migration
         }
 
         $this->createTable('{{%user}}', [
-            'id' => Schema::TYPE_PK,
+            'id' => Schema::TYPE_STRING . ' PRIMARY KEY',
             'username' => Schema::TYPE_STRING . '(32)',
+            'full_name' => Schema::TYPE_STRING,
             'auth_key' => Schema::TYPE_STRING . '(32) NOT NULL',
             'password_hash' => Schema::TYPE_STRING . ' NOT NULL',
             'password_reset_token' => Schema::TYPE_STRING,
             'oauth_client' => Schema::TYPE_STRING,
             'oauth_client_user_id' => Schema::TYPE_STRING,
+            'locale' => Schema::TYPE_STRING,
             'email' => Schema::TYPE_STRING . ' NOT NULL',
             'status' => Schema::TYPE_SMALLINT . ' NOT NULL DEFAULT '.\common\models\User::STATUS_ACTIVE,
             'created_at' => Schema::TYPE_INTEGER,
@@ -29,9 +31,9 @@ class m140703_123000_user extends Migration
 
         $this->insert('{{%user}}', [
             'id'=>1,
-            'username'=>'webmaster',
+            'username'=>'admin',
             'email'=>'webmaster@example.com',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('webmaster'),
+            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('admin'),
             'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
             'status'=>\common\models\User::STATUS_ACTIVE,
             'created_at'=>time(),
@@ -39,9 +41,9 @@ class m140703_123000_user extends Migration
         ]);
         $this->insert('{{%user}}', [
             'id'=>2,
-            'username'=>'manager',
-            'email'=>'manager@example.com',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('manager'),
+            'username'=>'maker',
+            'email'=>'maker@example.com',
+            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('maker'),
             'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
             'status'=>\common\models\User::STATUS_ACTIVE,
             'created_at'=>time(),
@@ -49,6 +51,16 @@ class m140703_123000_user extends Migration
         ]);
         $this->insert('{{%user}}', [
             'id'=>3,
+            'username'=>'runner',
+            'email'=>'runner@example.com',
+            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('runner'),
+            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
+            'status'=>\common\models\User::STATUS_ACTIVE,
+            'created_at'=>time(),
+            'updated_at'=>time()
+        ]);
+        $this->insert('{{%user}}', [
+            'id'=>4,
             'username'=>'user',
             'email'=>'user@example.com',
             'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('user'),

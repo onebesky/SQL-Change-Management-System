@@ -71,10 +71,7 @@ class FixtureHelper extends Module
                 'class' => UserFixture::className(),
                 'dataFile' => '@tests/codeception/common/fixtures/data/user.php',
             ],
-            'user_profile' => [
-                'class' => UserProfileFixture::className(),
-                'dataFile' => '@tests/codeception/common/fixtures/data/user_profile.php',
-            ]
+
         ];
     }
 }

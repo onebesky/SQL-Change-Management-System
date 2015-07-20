@@ -39,7 +39,8 @@ class UserSearch extends User
     public function search($params)
     {
         $query = User::find();
-
+        $query->andWhere('status=' . User::STATUS_ACTIVE);
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

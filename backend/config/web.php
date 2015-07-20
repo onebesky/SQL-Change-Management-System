@@ -4,7 +4,7 @@ $config = [
     'controllerNamespace' => 'backend\controllers',
     'defaultRoute'=>'timeline-event/index',
     'controllerMap'=>[
-        'file-manager-elfinder' => [
+        /*'file-manager-elfinder' => [
             'class' => 'mihaildev\elfinder\Controller',
             'access' => ['manager'],
             'disabledCommands' => ['netmount'],
@@ -16,7 +16,7 @@ $config = [
                     'access' => ['read' => 'manager', 'write' => 'manager']
                 ]
             ]
-        ]
+        ]*/
     ],
     'components'=>[
         'errorHandler' => [
@@ -74,9 +74,10 @@ $config = [
                 'controllers'=>['user'],
                 'allow' => false,
             ],
+            // by default allow all signed in users to access undefined actions
             [
                 'allow' => true,
-                'roles' => ['manager'],
+                'roles' => ['@'],
             ]
         ]
     ]
@@ -89,9 +90,9 @@ if (YII_ENV_DEV) {
             'crud' => [
                 'class'=>'yii\gii\generators\crud\Generator',
                 'templates'=>[
-                    'yii2-starter-kit' => Yii::getAlias('@backend/views/_gii/templates')
+                    'sql-audit' => Yii::getAlias('@backend/views/_gii/templates')
                 ],
-                'template' => 'yii2-starter-kit',
+                'template' => 'sql-audit',
                 'messageCategory' => 'backend'
             ]
         ]

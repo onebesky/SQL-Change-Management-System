@@ -64,7 +64,6 @@ class DefaultController extends Controller
         $model = new MultiModel([
             'models' => [
                 'account' => $accountModel,
-                'profile' => Yii::$app->user->identity->userProfile
             ]
         ]);
 

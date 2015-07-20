@@ -14,7 +14,7 @@ $this->title = Yii::$app->name;
     <div class="jumbotron">
         <h1>Congratulations!</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <p class="lead">You have successfully created your Frontend application.</p>
 
         <?php echo common\widgets\DbMenu::widget([
             'key'=>'frontend-index',
