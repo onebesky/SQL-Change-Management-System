@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\ServerConnection;
-use common\models\ServerConnectionQuery;
+use backend\models\search\ServerConnectionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +32,7 @@ class ServerConnectionController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ServerConnectionQuery();
+        $searchModel = new ServerConnectionSearch(Yii::$app->request->queryParams);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -53,6 +53,22 @@ class ServerConnectionController extends Controller
         ]);
     }
 
+    public function actionTest(){
+        $model = new ServerConnection();
+        if ($model->load(Yii::$app->request->post())) {
+            if (!$model->validate()){
+                throw new Exception($model->getErrors()[0][0]);
+            }
+            if (!$model->testConnection()) {
+                throw new Exception("The provided parameters are not valid.");
+            }
+            echo "success";
+            
+        } else {
+            throw new Exception("Could not connect to the server");
+        }
+    }
+    
     /**
      * Creates a new ServerConnection model.
      * If creation is successful, the browser will be redirected to the 'view' page.

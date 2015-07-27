@@ -20,7 +20,7 @@ class m150717_255633_database_connection extends Migration {
             'username' => Schema::TYPE_STRING,
             'password' => Schema::TYPE_STRING,
             'json_data' => Schema::TYPE_STRING,
-
+            'active' => Schema::TYPE_BOOLEAN . ' DEFAULT "1"'
                 ], $tableOptions);
         
     }
