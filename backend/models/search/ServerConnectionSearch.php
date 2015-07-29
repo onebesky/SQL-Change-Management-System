@@ -42,6 +42,7 @@ class ServerConnectionSearch extends ServerConnection
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        $query->andWhere('server_connection.active=1');
 
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
@@ -50,7 +51,7 @@ class ServerConnectionSearch extends ServerConnection
         $query->andFilterWhere([
             'type' => $this->type,
         ]);
-
+        
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'connection_string', $this->connection_string])
             ->andFilterWhere(['like', 'id', $this->id]);

@@ -99,9 +99,9 @@ class ServerConnection extends \yii\db\ActiveRecord {
                 'username' => $this->username,
                 'password' => $this->password,
             ]);
-            if (!$connection->open()){
-                throw new Exception("Could not open database connection. Check the connector configuration.");
-            }
+
+            $connection->open();
+             
             $this->dbConnection = $connection;
         }
         return $this->dbConnection;

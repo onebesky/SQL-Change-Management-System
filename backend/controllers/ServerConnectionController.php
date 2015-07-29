@@ -114,7 +114,9 @@ class ServerConnectionController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->active=0;
+        $model->save();
 
         return $this->redirect(['index']);
     }
