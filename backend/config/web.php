@@ -86,6 +86,7 @@ $config = [
 if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class'=>'yii\gii\Module',
+        'allowedIPs' => ['127.0.0.1', '192.168.33.10'],
         'generators' => [
             'crud' => [
                 'class'=>'yii\gii\generators\crud\Generator',

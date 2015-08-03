@@ -1,0 +1,19 @@
+<?php
+
+use yii\helpers\Html;
+
+
+/* @var $this yii\web\View */
+/* @var $model common\models\TaskExecution */
+
+$this->title = 'Create Task Execution';
+$this->params['breadcrumbs'][] = ['label' => 'Task Executions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="task-execution-create">
+
+    <?php echo $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>

@@ -18,7 +18,7 @@ class m150717_255634_command extends Migration {
             'save_as_template' => Schema::TYPE_BOOLEAN . ' DEFAULT "0"',
             'command' => Schema::TYPE_TEXT . ' NOT NULL',
             'server_connection_id' => Schema::TYPE_STRING . ' NOT NULL',
-            'execute_on' => Schema::TYPE_INTEGER,
+            'execute_on' => Schema::TYPE_INTEGER, // scheduled execution
             'author' => Schema::TYPE_STRING . ' NOT NULL',
             'type' => Schema::TYPE_INTEGER . ' NOT NULL', //sql, php migration, bash
             'created_at' => Schema::TYPE_INTEGER,
