@@ -14,29 +14,30 @@ use yii\bootstrap\ActiveForm;
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->field($model, 'id')->textInput(['maxlength' => true]) ?>
-
     <?php echo $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?php echo $form->field($model, 'server_connection_id')->dropDownList(\yii\helpers\ArrayHelper::map(common\models\ServerConnection::find()->all(), 'id', 'name'))->hint('Database / shell connection to execute this command.') ?>
+
+    <?php echo $form->field($model, 'command')->textarea(['rows' => 6]) ?>
+    
     <?php echo $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?php echo $form->field($model, 'save_as_template')->checkbox() ?>
 
-    <?php echo $form->field($model, 'command')->textarea(['rows' => 6]) ?>
+    
+    <?php 
+    // TODO: timed execution
+    //echo $form->field($model, 'execute_on')->textInput()->hint() ?>
 
-    <?php echo $form->field($model, 'server_connection_id')->textInput(['maxlength' => true]) ?>
+    <?php 
+    // What is the type for? Is it the same  type as server connection?
+    // echo $form->field($model, 'type')->textInput() ?>
 
-    <?php echo $form->field($model, 'execute_on')->textInput() ?>
+    <?php echo $form->field($model, 'external_issue_id')->textInput(['maxlength' => true])->hint('External tracker task id or link to issue.') ?>
 
-    <?php echo $form->field($model, 'author')->textInput(['maxlength' => true]) ?>
-
-    <?php echo $form->field($model, 'type')->textInput() ?>
-
-    <?php echo $form->field($model, 'created_at')->textInput() ?>
-
-    <?php echo $form->field($model, 'external_issue_id')->textInput(['maxlength' => true]) ?>
-
-    <?php echo $form->field($model, 'chained_task_id')->textInput(['maxlength' => true]) ?>
+    <?php 
+    // Might create chained command runner instead
+    //echo $form->field($model, 'chained_task_id')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?php echo Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

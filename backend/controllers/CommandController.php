@@ -61,7 +61,15 @@ class CommandController extends Controller
     public function actionCreate()
     {
         $model = new Command();
-
+        $model->author = \Yii::$app->user->identity->id;
+        
+        // check that at least one server connection exists
+        $connection = \common\models\ServerConnection::find();
+        if (!$connection) {
+            // TODO: set error message
+            $this->redirect('/server-connection');
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

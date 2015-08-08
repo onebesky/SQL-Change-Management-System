@@ -19,13 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'name',
-            'description:ntext',
-            'save_as_template:boolean',
-            'command:ntext',
+            //'description:ntext',
+            //'save_as_template:boolean',
+            //'command:ntext',
             // 'server_connection_id',
             // 'execute_on',
             // 'author',
@@ -33,7 +33,20 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_at',
             // 'external_issue_id',
             // 'chained_task_id',
-
+            
+            [
+                'header' => 'Author',
+                'attribute' => 'author',
+                'value' => function($data){
+                    return $data->authorUser->full_name;
+                }
+            ],
+            [
+                'header' => 'Approved',
+                'value' => function($data) {
+                    return "nope";
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -153,6 +153,11 @@ use yii\widgets\Breadcrumbs;
                         'visible' => Yii::$app->user->can('administrator')
                     ],
                     [
+                        'label' => Yii::t('backend', 'Commands'),
+                        'icon' => '<i class="fa fa-laptop"></i>',
+                        'url' => ['/command']
+                    ],
+                    [
                         'label' => Yii::t('backend', 'Settings'), // should be renamed to system
                         'icon' => '<i class="fa fa-cogs"></i>',
                         'items' => [
@@ -163,6 +168,7 @@ use yii\widgets\Breadcrumbs;
                             ],
                         ],
                     ],
+                    
                     [
                         'label' => Yii::t('backend', 'System'),
                         'icon' => '<i class="fa fa-cogs"></i>',

@@ -24,6 +24,10 @@ use common\behaviors\AuditBehavior;
  */
 class Command extends \yii\db\ActiveRecord {
 
+    const TYPE_SQL = 1;
+    const TYPE_PHP = 2;
+    const TYPE_BASH = 3;
+    
     /**
      * @inheritdoc
      */
@@ -68,14 +72,48 @@ class Command extends \yii\db\ActiveRecord {
             'description' => 'Description',
             'save_as_template' => 'Save As Template',
             'command' => 'Command',
-            'server_connection_id' => 'Server Connection ID',
+            'server_connection_id' => 'Server Connection',
             'execute_on' => 'Execute On',
             'author' => 'Author',
             'type' => 'Type',
             'created_at' => 'Created At',
             'external_issue_id' => 'External Issue ID',
-            'chained_task_id' => 'Chained Task ID',
+            'chained_task_id' => 'Chained Task',
         ];
     }
 
+    public function beforeSave($insert) {
+        $this->created_at = time();
+        return parent::beforeSave($insert);
+    }
+    
+    public function beforeValidate() {
+        if (!$this->type) {
+            $this->type = self::TYPE_SQL;
+        }
+        return parent::beforeValidate();
+    }
+    
+    /**
+     * Command can be deleted if there are no executions
+     */
+    public function canDelete() {
+        $task = TaskExecution::findOne(['command_id' => $this->id]);
+        if ($task) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExecutions()
+    {
+        return $this->hasMany(TaskExecution::className(), ['command_id' => 'id']);
+    }
+    
+    public function getAuthorUser() {
+        return $this->hasOne(User::className(), ['id' => 'author']);
+    }
 }

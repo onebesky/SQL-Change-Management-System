@@ -36,7 +36,8 @@
     "trntv/yii2-tactician": "^0.1.0",
     "trntv/cheatsheet": "^0.1@dev",
     "vlucas/phpdotenv": "^2.0",
-    "bower-asset/jquery-ui": "*"
+    "bower-asset/jquery-ui": "*",
+    "kartik-v/yii2-widget-select2": "@dev"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.0.0",

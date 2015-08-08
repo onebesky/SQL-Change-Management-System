@@ -55,7 +55,7 @@ class ServerConnectionSearch extends ServerConnection
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'connection_string', $this->connection_string])
             ->andFilterWhere(['like', 'id', $this->id]);
-
+ 
         return $dataProvider;
     }
 }
