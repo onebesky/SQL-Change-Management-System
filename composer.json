@@ -1,27 +1,23 @@
 {
-  "name": "trntv/yii2-starter-kit",
-  "description": "Yii2 Starter Kit Application Template",
+  "name": "onebesky/sql-audit",
+  "description": "SQL Audit",
   "keywords": [
     "yii2",
-    "framework",
-    "start",
-    "application template",
-    "yii2 advanced"
+    "change management",
+    "sql audit",
+    "sql review"
   ],
   "authors": [
     {
-      "name": "Eugene Terentev",
-      "email": "eugene@terentev.net",
-      "homepage": "http://terentev.net",
+      "name": "Ondrej Nebesky",
+      "email": "ondrej@freshrealm.co",
+      "homepage": "http://freshrealm.co",
       "role": "Developer"
     }
   ],
   "type": "project",
   "license": "BSD-3-Clause",
-  "support": {
-    "issues": "https://github.com/trntv/yii2-starter-kit/issues?state=open",
-    "source": "https://github.com/trntv/yii2-starter-kit"
-  },
+
   "require": {
     "php": ">=5.5.0",
     "ext-intl": "*",

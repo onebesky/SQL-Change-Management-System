@@ -78,7 +78,6 @@ class ServerConnection extends \yii\db\ActiveRecord {
 
     public function testConnection() {
         $testerName = "common\\models\\connectionTester\\" . ucfirst($this->type) . 'ConnectionTester';
-        \d($testerName);
         $tester = new $testerName($this);
         return $tester->run();
     }

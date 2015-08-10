@@ -16,6 +16,13 @@ use Yii;
  */
 class TaskExecution extends \yii\db\ActiveRecord
 {
+    
+    const STATUS_WAITING = 1;
+    const STATUS_RUNNING = 2;
+    const STATUS_SUCCESS = 3;
+    const STATUS_ERROR = 4;
+    const STATUS_UNKNOWN = 5;
+    
     /**
      * @inheritdoc
      */

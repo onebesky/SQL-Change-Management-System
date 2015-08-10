@@ -36,14 +36,14 @@ $config = [
         'guid' => [
             'class' => 'common\components\guid\GUniqueId'
         ],
-        'glide' => [
+        /*'glide' => [
             'class' => 'trntv\glide\components\Glide',
             'sourcePath' => '@storage/web/source',
             'cachePath' => '@storage/cache',
             'urlManager' => 'urlManagerStorage',
             'maxImageSize' => getenv('GLIDE_MAX_IMAGE_SIZE'),
             'signKey' => getenv('GLIDE_SIGN_KEY')
-        ],
+        ],*/
 
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
