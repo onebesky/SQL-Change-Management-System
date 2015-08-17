@@ -40,6 +40,10 @@ class m150625_215624_init_permissions extends Migration
         $commandView = $this->auth->createPermission('command.view');
         $this->auth->add($commandView);
         $this->auth->addChild($userRole, $commandView);
+        
+        $taskView = $this->auth->createPermission('command.task');
+        $this->auth->add($taskView);
+        $this->auth->addChild($userRole, $commandView);
     }
 
     public function down()

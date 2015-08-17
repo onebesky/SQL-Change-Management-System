@@ -18,7 +18,6 @@ class m150717_255634_command extends Migration {
             'save_as_template' => Schema::TYPE_BOOLEAN . ' DEFAULT "0"',
             'command' => Schema::TYPE_TEXT . ' NOT NULL',
             'server_connection_id' => Schema::TYPE_STRING . ' NOT NULL',
-            'execute_on' => Schema::TYPE_INTEGER, // scheduled execution
             'author' => Schema::TYPE_STRING . ' NOT NULL',
             'type' => Schema::TYPE_INTEGER . ' NOT NULL', //sql, php migration, bash
             'created_at' => Schema::TYPE_INTEGER,
@@ -35,7 +34,9 @@ class m150717_255634_command extends Migration {
             'result_data' => Schema::TYPE_TEXT, // text output
             'input_command' => Schema::TYPE_TEXT, // copy of the command executed
             'command_id' => Schema::TYPE_TEXT,
+            'server_connection_id' => Schema::TYPE_STRING . ' NOT NULL',
             'executed_by' => Schema::TYPE_TEXT, // user who executed the command
+            'scheduled_on' => Schema::TYPE_INTEGER, // scheduled execution
         ]);
         
         $this->createTable('{{%command_review}}', [
@@ -44,6 +45,10 @@ class m150717_255634_command extends Migration {
             'command_id' => Schema::TYPE_STRING . ' NOT NULL',
             'approved' => Schema::TYPE_BOOLEAN
         ]);
+        
+        if ($this->db->driverName === 'mysql') {
+            $this->addForeignKey('command_task_fk', '{{%task_execution}}', 'command_id', '{{%command}}', 'id', 'CASCADE');
+        }
         
     }
 

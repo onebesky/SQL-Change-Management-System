@@ -181,7 +181,9 @@ class Command extends \yii\db\ActiveRecord {
         // save current version of executed command
         $model->input_command = $this->command;
         $model->executed_by = $userId;
-        $model->status = TaskExecution::STATUS_RUNNING;
+        $model->server_connection_id = $this->server_connection_id;
+        $model->result_status = TaskExecution::STATUS_RUNNING;
+        $model->execution_start = time();
         $model->save();
         
         // test connection
@@ -197,7 +199,8 @@ class Command extends \yii\db\ActiveRecord {
         }
         
         try {
-            $result = $connection->dbConnection->createCommand($this->input_command)->execute();
+            $result = $connection->dbConnection->createCommand($this->command)->execute();
+            d($result);
         } catch (Exception $ex) {
             $model->result_data = $ex->getMessage() . "\n" . $ex->getStackTrace();
             $model->result_status = TaskExecution::STATUS_ERROR;
@@ -209,6 +212,6 @@ class Command extends \yii\db\ActiveRecord {
         $model->result_status = TaskExecution::STATUS_SUCCESS;
         $model->execution_end = time();
         $model->save();
-        
+        return $model;
     }
 }

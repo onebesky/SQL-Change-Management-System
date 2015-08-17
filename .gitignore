@@ -5,6 +5,7 @@
 # composer
 /vendor
 composer.phar
+/auth.json
 
 # IDE
 .idea

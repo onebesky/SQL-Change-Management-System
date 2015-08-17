@@ -36,7 +36,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = domains[0]
-  config.vm.network "private_network", ip: options['network']['ip']
+  config.vm.network "private_network", ip: options['network']['ip'], virtualbox__intnet: true
+  #config.vm.network ip: options['network']['ip']
   config.vm.synced_folder "./", "/var/www", id: "vagrant-root", :nfs => false, owner: "www-data", group: "www-data"
 
   config.vm.provision :hostmanager

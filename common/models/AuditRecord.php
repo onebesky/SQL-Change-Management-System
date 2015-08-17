@@ -71,7 +71,7 @@ class AuditRecord extends \yii\db\ActiveRecord {
     }
 
     public static function getUserId() {
-        if (php_sapi_name() == "cli" || Yii::$app->user == null || Yii::$app->user->isGuest) {
+        if (php_sapi_name() == "cli" || !isset(Yii::$app->user) || Yii::$app->user == null || Yii::$app->user->isGuest) {
             return null;
         } else {
             return Yii::$app->user->id;

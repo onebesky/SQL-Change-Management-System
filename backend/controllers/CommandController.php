@@ -47,8 +47,18 @@ class CommandController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
+        $model = $this->findModel($id);
+        $resultDataProvider = new ActiveDataProvider([
+            'query' => TaskExecution::find()->where(['command_id' => $id]),
+            'sort' => [
+                'defaultOrder' => [
+                    'execution_start' => SORT_DESC
+                ]
+            ],
+        ]);
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+                    'model' => $model,
+                    'results' => $resultDataProvider
         ]);
     }
 
@@ -126,34 +136,31 @@ class CommandController extends Controller {
     public function actionExecute($id) {
         $command = $this->findModel($id);
 
+        $userId = Yii::$app->user->identity->id;
+        \d("user", $userId);
+        
         if (!$command->canExecute()) {
             throw new \yii\web\HttpException("The command requires approval before execution.");
         }
 
-        // create task execution 
-        $model = new TaskExecution();
-        $model->command_id = $command->id;
-        // save current version of executed command
-        $model->input_command = $command->command;
-
-        // test connection
-        $connection = $command->serverConnection;
-        $test = $connection->testConnection();
-        d("connected", $test);
-        if (!$test) {
-            $model->result_status = TaskExecution::STATUS_ERROR;
-            throw new \yii\web\HttpException("Cannot connect to server.");
-        }
-        // execute command
-        // save
-
+        $task = $command->execute($userId);
+        \d($task->attributes);
         if (Yii::$app->request->isAjax) {
-            
+            $this->render('task_view', ['model' => $task]);
         } else {
-            
+            echo "1";
         }
-
-        echo "executed";
+    }
+    
+    /**
+     * View task execution result
+     * @param string $id
+     */
+    public function actionTask($id) {
+        if (($model = TaskExecution::findOne($id)) == null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        $this->render('task_view', ['model' => $model]);
     }
 
 }

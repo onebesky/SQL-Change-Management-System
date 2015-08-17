@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Command */
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]);*/
             echo yii\bootstrap\Button::widget([
-                'label' => 'Execute',
+                'label' => 'Execute now',
                 'options' => ['class' => 'btn-warning', 'id' => 'execute-button']
             ]);
         }
@@ -43,22 +44,51 @@ $this->params['breadcrumbs'][] = $this->title;
     echo DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
+            //'id',
+            //'name',
             'description:ntext',
             'save_as_template:boolean',
             'command:ntext',
             'server_connection_id',
             'execute_on',
-            'author',
+            'authorUser.name',
             'type',
-            'created_at',
+            'created_at:datetime',
             'external_issue_id',
-            'chained_task_id',
         ],
     ])
     ?>
 
+</div>
+<div class="command-results">
+    <h2>Results</h2>
+    <?php echo GridView::widget([
+        'dataProvider' => $results,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'execution_start:datetime',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function($data) {
+    switch ($data->result_status) {
+        case \common\models\TaskExecution::STATUS_WAITING:
+            return '<span class="label label-inverse">Scheduled on ' . Yii::$app->formatter->asDate($data->scheduled_on) . '</span>';
+        case \common\models\TaskExecution::STATUS_UNKNOWN:
+            return '<span class="label">Unknown</span>';
+        case \common\models\TaskExecution::STATUS_SUCCESS:
+            return '<span class="label label-success">Success</span>';
+        case \common\models\TaskExecution::STATUS_ERROR:
+            return '<span class="label label-errr">Error</span>';
+        case \common\models\TaskExecution::STATUS_RUNNING:
+            return '<span class="label label-warning">Error</span>';
+    }
+    
+    return '<span class="label">n/a</span>';
+                }
+            ]
+        ],
+    ]); ?>
 </div>
 <?php
 $this->registerJs('
