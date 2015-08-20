@@ -67,13 +67,14 @@ class TaskExecution extends \yii\db\ActiveRecord {
     public function behaviors() {
         return [
             GuidBehavior::className(),
-            'audit' => [
+            // TODO: create outside event
+            /*'audit' => [
                 'class' => AuditBehavior::className(),
                 'events' => [],
                 'dataFunction' => function($model) {
             return $model->oldAttributes;
         }
-            ]
+            ]*/
         ];
     }
 

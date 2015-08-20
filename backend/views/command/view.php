@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
+use backend\widgets\ClickGridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Command */
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary', 'style' => 'margin-right: 16px;']);
         if ($model->canExecute(\Yii::$app->user->identity)) {
            /* echo Html::a('Execute', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-warning',
@@ -49,9 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             'save_as_template:boolean',
             'command:ntext',
-            'server_connection_id',
-            'execute_on',
-            'authorUser.name',
+            ['label' => 'Server Connection', 'value' => $model->serverConnection->name . ' (' . $model->serverConnection->type . ')'],
+            //'execute_on',
+            ['label' => 'Author Name', 'value' => $model->authorUser->name],
             'type',
             'created_at:datetime',
             'external_issue_id',
@@ -62,11 +62,20 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="command-results">
     <h2>Results</h2>
-    <?php echo GridView::widget([
+    <?php echo ClickGridView::widget([
         'dataProvider' => $results,
+        'clickTarget' => 'task',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'backend\widgets\ReverseSerialColumn'],
             'execution_start:datetime',
+            [
+                'label' => 'Duration',
+                'value' => function($data){
+                    if ($data->execution_end){
+                        return $data->execution_end - $data->execution_start . ' sec';
+                    }
+                }
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',
@@ -86,7 +95,8 @@ $this->params['breadcrumbs'][] = $this->title;
     
     return '<span class="label">n/a</span>';
                 }
-            ]
+            ],
+            
         ],
     ]); ?>
 </div>
@@ -105,10 +115,11 @@ $("#execute-button").on("click", function(){
             console.log("done", $data);
             $btn.html(origText);
             $btn.prop("disabled", false);
-        }
-        error: function() {
-            console.log("error");
-            $btn.html(origText);
+            location.reload();
+        },
+        error: function(err) {
+            console.log("error", err, origText);
+            $btn.html("Execute now");
             $btn.prop("disabled", false);
         }
     });

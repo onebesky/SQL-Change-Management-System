@@ -28,7 +28,7 @@ $icons = [
                     <li>
                         <?php
                             try {
-                                $viewFile = sprintf('%s/%s', $model->category, $model->event);
+                                $viewFile = sprintf('%s/%s', $model->connected_type, $model->event);
                                 echo $this->render($viewFile, ['model' => $model]);
                             } catch (\yii\base\InvalidParamException $e) {
                                 echo $this->render('_item', ['model' => $model]);

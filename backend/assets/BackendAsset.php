@@ -13,10 +13,10 @@ use yii\web\AssetBundle;
 class BackendAsset extends AssetBundle
 {
     public $basePath = '/';
-    public $baseUrl = '@backendUrl';
+    public $baseUrl = '@web';
 
     public $css = [
-        //'css/style.css'
+        'css/style.css'
     ];
     public $js = [
         //'js/app.js'

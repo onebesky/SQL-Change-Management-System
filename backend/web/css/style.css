@@ -1,7 +1,7 @@
-body > .header .logo {
+body  > .header .logo {
   font-family: inherit;
 }
-body > .header .navbar .nav > li > a > .badge {
+body  > .header .navbar .nav > li > a > .badge {
   position: absolute;
   top: 4px;
   right: 0;
@@ -19,4 +19,11 @@ body .user-panel > .info {
 body .table {
   word-break: break-all;
 }
-/*# sourceMappingURL=style.map */
+body .click-table td {
+  cursor: pointer;
+}
+body .click-table tr:hover {
+  background-color: #ccc;
+}
+
+/* This beautiful CSS-File has been crafted with LESS (lesscss.org) and compiled by simpLESS (wearekiss.com/simpless) */

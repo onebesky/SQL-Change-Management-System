@@ -16,11 +16,9 @@ date_default_timezone_set('Europe/London');
 
     <div class="timeline-body">
         <dl>
-            <dt><?php echo Yii::t('backend', 'Application') ?>:</dt>
-            <dd><?php echo $model->application ?></dd>
-
+ 
             <dt><?php echo Yii::t('backend', 'Category') ?>:</dt>
-            <dd><?php echo $model->category ?></dd>
+            <dd><?php echo $model->connected_type ?></dd>
 
             <dt><?php echo Yii::t('backend', 'Event') ?>:</dt>
             <dd><?php echo $model->event ?></dd>

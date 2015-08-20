@@ -113,9 +113,16 @@ class CommandController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        if ($model->canDelete()){
+            $model->delete();
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('alert', [
+                'body'=>\Yii::t('backend', 'Command has been executed at least once and cannot be deleted.'),
+                'options'=>['class'=>'alert-error']
+            ]);
+        }
     }
 
     /**
@@ -145,8 +152,21 @@ class CommandController extends Controller {
 
         $task = $command->execute($userId);
         \d($task->attributes);
-        if (Yii::$app->request->isAjax) {
-            $this->render('task_view', ['model' => $task]);
+        if ($task->result_status == TaskExecution::STATUS_SUCCESS) {
+            Yii::$app->session->setFlash('alert', [
+                'body'=>\Yii::t('backend', 'The command has been executed succesfully.'),
+                'options'=>['class'=>'alert-success']
+            ]);
+        } else {
+            Yii::$app->session->setFlash('alert', [
+                'body'=>\Yii::t('backend', 'The command didn\'t execute correctly.'),
+                'options'=>['class'=>'alert-error']
+            ]);
+        }
+        
+        if (!Yii::$app->request->isAjax) {
+            
+            $this->render('view', ['model' => $command]);
         } else {
             echo "1";
         }

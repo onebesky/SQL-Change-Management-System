@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\search\TimelineEventSearch;
+use backend\models\search\AuditRecordSearch;
 use yii\web\Controller;
 
 /**
@@ -19,7 +19,7 @@ class TimelineEventController extends Controller
     
     public function actionIndex()
     {
-        $searchModel = new TimelineEventSearch();
+        $searchModel = new AuditRecordSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->sort = [
             'defaultOrder'=>['created_at'=>SORT_DESC]
