@@ -4,7 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\behaviors\GuidBehavior;
-
+use common\models\query\AuditRecordQuery;
 /**
  * This is the model class for table "audit_record".
  *
@@ -70,6 +70,14 @@ class AuditRecord extends \yii\db\ActiveRecord {
         ];
     }
 
+    /**
+     * @return TimelineEventQuery
+     */
+    public static function find()
+    {
+        return new AuditRecordQuery(get_called_class());
+    }
+    
     public static function getUserId() {
         if (php_sapi_name() == "cli" || !isset(Yii::$app->user->isGuest) || Yii::$app->user == null || Yii::$app->user->isGuest) {
             return null;
@@ -100,7 +108,14 @@ class AuditRecord extends \yii\db\ActiveRecord {
             'client_ip' => self::getIpAddress()
         ];
         $model->save();
-        \d($model->getErrors());
+    }
+
+    public function getDataArray() {
+        return \yii\helpers\Json::decode($this->data);
+    }
+    
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
 }

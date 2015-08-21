@@ -30,4 +30,15 @@ class TimelineEventController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionView($id) {
+        $model = \common\models\AuditRecord::findOne($id);
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        
+        return $this->render('view', [
+            'model' => $model
+        ]);
+    }
 }

@@ -62,15 +62,30 @@ class User extends ActiveRecord implements IdentityInterface {
                 'value' => Yii::$app->getSecurity()->generateRandomString()
             ],
             GuidBehavior::className(),
-            
             'audit' => [
                 'class' => AuditBehavior::className(),
                 'events' => [],
                 'dataFunction' => function($model) {
-                    return $model->oldAttributes;
-                }
+            return $this->getAuditAttributes($model->oldAttributes);
+        }
             ]
         ];
+    }
+
+    private function getAuditAttributes($attributes) {
+        if (isset($attributes['password'])) {
+            unset($attributes['password']);
+        }
+        if (isset($attributes['password_hash'])) {
+            unset($attributes['password_hash']);
+        }
+        if (isset($attributes['password_reset_token'])) {
+            unset($attributes['password_reset_token']);
+        }
+        if (isset($attributes['auth_key'])) {
+            unset($attributes['auth_key']);
+        }
+        return $attributes;
     }
 
     /**
@@ -118,6 +133,20 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public static function findIdentity($id) {
         return static::findOne($id);
+    }
+
+    /**
+     * Detect audit events when user is updated
+     */
+    public function auditUpdate() {
+        $attributes = $this->getAuditAttributes($this->oldAttributes);
+        if (isset($attributes['logged_at']) && $attributes['logged_at'] != $this->logged_at) {
+            $attributes['username'] = $this->getName();
+            AuditRecord::create('user-signedin', 'user', $this->id, $attributes);
+        } else {
+            // user updated
+            AuditRecord::create('user-updated', 'user', $this->id, $attributes);
+        }
     }
 
     /**
@@ -280,12 +309,12 @@ class User extends ActiveRecord implements IdentityInterface {
         }
         return $this->email;
     }
-    
+
     /**
      * Full name or username
      * @return type
      */
-    public function getName(){
+    public function getName() {
         return $this->full_name ? $this->full_name : $this->username;
     }
 

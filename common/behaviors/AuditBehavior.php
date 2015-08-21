@@ -27,13 +27,14 @@ class AuditBehavior extends Behavior {
     }
     
     public function afterUpdate() {
-        \d('audit update');
-        \d($this->getData());
-        AuditRecord::create($this->getEventName('updated'), $this->owner->tableSchema->name, $this->owner->primaryKey, $this->getData());
+        if (method_exists($this->owner, 'auditUpdate')) {
+            $this->owner->auditUpdate();
+        } else {
+            AuditRecord::create($this->getEventName('updated'), $this->owner->tableSchema->name, $this->owner->primaryKey, $this->getData());
+        }
     }
     
     public function afterDelete() {
-        \d("after delete");
         AuditRecord::create($this->getEventName('deleted'), $this->owner->tableSchema->name, $this->owner->primaryKey, $this->owner->attributes);
     }
     

@@ -10,7 +10,7 @@ namespace common\models\query;
 
 use yii\db\ActiveQuery;
 
-class TimelineEventQuery extends ActiveQuery
+class AuditRecordQuery extends ActiveQuery
 {
     public function today()
     {

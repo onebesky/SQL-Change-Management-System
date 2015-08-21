@@ -195,6 +195,7 @@ class Command extends \yii\db\ActiveRecord {
             $model->result_data('Cannot connect to server using connection ' . $connection->name);
             $model->execution_end = time();
             $model->save();
+            AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
             return $model;
         }
         
@@ -206,12 +207,14 @@ class Command extends \yii\db\ActiveRecord {
             $model->result_status = TaskExecution::STATUS_ERROR;
             $model->execution_end = time();
             $model->save();
+            AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
             return $model;
         }
         
         $model->result_status = TaskExecution::STATUS_SUCCESS;
         $model->execution_end = time();
         $model->save();
+        AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
         return $model;
     }
 }

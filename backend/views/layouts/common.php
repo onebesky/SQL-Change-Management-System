@@ -4,7 +4,7 @@
  * @var $this yii\web\View
  */
 use backend\widgets\Menu;
-use common\models\TimelineEvent;
+use common\models\AuditRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -33,7 +33,7 @@ use yii\widgets\Breadcrumbs;
                         <a href="<?php echo Url::to(['/timeline-event/index']) ?>">
                             <i class="fa fa-bell"></i>
                             <span class="label label-success">
-                                <?php echo TimelineEvent::find()->today()->count() ?>
+                                <?php echo AuditRecord::find()->today()->count() ?>
                             </span>
                         </a>
                     </li>
@@ -130,7 +130,7 @@ use yii\widgets\Breadcrumbs;
                         'label' => Yii::t('backend', 'Timeline'),
                         'icon' => '<i class="fa fa-bar-chart-o"></i>',
                         'url' => ['/timeline-event/index'],
-                        'badge' => TimelineEvent::find()->today()->count(),
+                        'badge' => AuditRecord::find()->today()->count(),
                         'badgeBgClass' => 'label-success',
                     ],
                     [
