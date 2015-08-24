@@ -37,6 +37,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]);
         }
+        
+        echo yii\bootstrap\Button::widget([
+                'label' => 'Approve',
+                'options' => ['class' => 'pull-right', 'id' => 'approve-button']
+            ]);
         ?>
     </p>
 
@@ -113,7 +118,7 @@ $("#execute-button").on("click", function(){
         },
         success: function($data) {
             console.log("done", $data);
-            $btn.html(origText);
+            $btn.html("Execute now");
             $btn.prop("disabled", false);
             location.reload();
         },
@@ -124,4 +129,29 @@ $("#execute-button").on("click", function(){
         }
     });
 });
+
+$("#approve-button").on("click", function() {
+    var $btn = $(this);
+    var approved;
+    if ($btn.hasClass("btn-success")) {
+        $btn.removeClass("btn-success");
+        $btn.html("Approve");
+        approved = 0;
+    } else {
+        $btn.addClass("btn-success");
+        $btn.html("Approved");
+        approved = 1;
+    }
+    
+    $.ajax({
+        url: "approve?id=' . $model->id . '&approved=" + approved,
+        error: function(){
+            alert("Error approving the command");
+        }
+    });
+});
     ');
+
+if ($model->isApproved($userId)) {
+    $this->registerJs('$("#approve-button").html("Approved").toggleClass("btn-success");');
+}

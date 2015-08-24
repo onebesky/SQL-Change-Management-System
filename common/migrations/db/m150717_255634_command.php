@@ -55,6 +55,7 @@ class m150717_255634_command extends Migration {
     public function down() {
         $this->dropTable('{{%command}}');
         $this->dropTable('{{%task_execution}}');
+        $this->dropTable('{{%command_review}}');
         return true;
     }
 

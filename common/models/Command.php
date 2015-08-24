@@ -27,9 +27,9 @@ class Command extends \yii\db\ActiveRecord {
     const TYPE_SQL = 1;
     const TYPE_PHP = 2;
     const TYPE_BASH = 3;
-    
+
     private $_reviewersFormInput;
-    
+
     /**
      * @inheritdoc
      */
@@ -49,7 +49,7 @@ class Command extends \yii\db\ActiveRecord {
             ]
         ];
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -100,19 +100,19 @@ class Command extends \yii\db\ActiveRecord {
         }
         return parent::beforeSave($insert);
     }
-    
+
     public function beforeValidate() {
         if (!$this->type) {
             $this->type = self::TYPE_SQL;
         }
         return parent::beforeValidate();
     }
-    
+
     public function afterSave($insert, $changedAttributes) {
 
         parent::afterSave($insert, $changedAttributes);
     }
-    
+
     /**
      * Command can be deleted if there are no executions
      */
@@ -123,7 +123,7 @@ class Command extends \yii\db\ActiveRecord {
         }
         return true;
     }
-    
+
     /**
      * Execution depends on user role and Command settings
      */
@@ -131,38 +131,37 @@ class Command extends \yii\db\ActiveRecord {
         // TODO: if app requires approval - check
         return true;
     }
-    
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getExecutions()
-    {
+    public function getExecutions() {
         return $this->hasMany(TaskExecution::className(), ['command_id' => 'id']);
     }
-    
+
     public function getAuthorUser() {
         return $this->hasOne(User::className(), ['id' => 'author']);
     }
-    
+
     /**
      * @return User[]
      */
     public function getReviewers() {
-        if (!strlen($this->reviewers_json)){
+        if (!strlen($this->reviewers_json)) {
             return [];
         }
         $data = json_decode($this->reviewers_json);
         return User::findAll()->where(['id' => $data]);
     }
-    
+
     public function getServerConnection() {
         return $this->hasOne(ServerConnection::className(), ['id' => 'server_connection_id']);
     }
-    
-    public function setReviewersFormInput($input){
+
+    public function setReviewersFormInput($input) {
         $this->_reviewersFormInput = $input;
     }
-    
+
     public function getReviewersFormInput() {
         if ($this->_reviewersFormInput) {
             return $this->_reviewersFormInput;
@@ -171,10 +170,9 @@ class Command extends \yii\db\ActiveRecord {
         $this->_reviewersFormInput = $reviewers;
         return $reviewers;
     }
-    
+
     public function execute($userId = null) {
         // TODO: will be different by type - SQL is just a prototype
-        
         // create task execution 
         $model = new TaskExecution();
         $model->command_id = $this->id;
@@ -185,20 +183,20 @@ class Command extends \yii\db\ActiveRecord {
         $model->result_status = TaskExecution::STATUS_RUNNING;
         $model->execution_start = time();
         $model->save();
-        
+
         // test connection
         $connection = $this->serverConnection;
         $test = $connection->testConnection();
-        
+
         if (!$test) {
             $model->result_status = TaskExecution::STATUS_ERROR;
             $model->result_data('Cannot connect to server using connection ' . $connection->name);
             $model->execution_end = time();
             $model->save();
-            AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
+            AuditRecord::create('executed', 'task_execution', $model->id, $model->attributes);
             return $model;
         }
-        
+
         try {
             $result = $connection->dbConnection->createCommand($this->command)->execute();
             d($result);
@@ -207,14 +205,31 @@ class Command extends \yii\db\ActiveRecord {
             $model->result_status = TaskExecution::STATUS_ERROR;
             $model->execution_end = time();
             $model->save();
-            AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
+            AuditRecord::create('executed', 'task_execution', $model->id, $model->attributes);
             return $model;
         }
-        
+
         $model->result_status = TaskExecution::STATUS_SUCCESS;
         $model->execution_end = time();
         $model->save();
-        AuditRecord::create($this->getEventName('executed'), 'task_execution', $model->id, $model->attributes);
+        AuditRecord::create('executed', 'task_execution', $model->id, $model->attributes);
         return $model;
     }
+
+    /**
+     * Is the command approved by any reviewer or specific one?
+     * @param string $userId
+     */
+    public function isApproved($userId = null) {
+        if ($userId) {
+            $review = CommandReview::find()->where(['reviewer_id' => $userId, 'command_id' => $this->id, 'approved' => 1])->one();
+        } else {
+            $review = CommandReview::find()->where(['command_id' => $this->id])->one();
+        }
+        if (!$review){
+            return false;
+        }
+        return $review->approved;
+    }
+
 }

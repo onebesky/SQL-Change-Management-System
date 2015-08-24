@@ -8,8 +8,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
 use common\models\TaskExecution;
+use common\models\CommandReview;
 
 /**
  * CommandController implements the CRUD actions for Command model.
@@ -58,7 +58,8 @@ class CommandController extends Controller {
         ]);
         return $this->render('view', [
                     'model' => $model,
-                    'results' => $resultDataProvider
+                    'results' => $resultDataProvider,
+                    'userId' => \Yii::$app->user->identity->id
         ]);
     }
 
@@ -114,13 +115,13 @@ class CommandController extends Controller {
      */
     public function actionDelete($id) {
         $model = $this->findModel($id);
-        if ($model->canDelete()){
+        if ($model->canDelete()) {
             $model->delete();
             return $this->redirect(['index']);
         } else {
             Yii::$app->session->setFlash('alert', [
-                'body'=>\Yii::t('backend', 'Command has been executed at least once and cannot be deleted.'),
-                'options'=>['class'=>'alert-error']
+                'body' => \Yii::t('backend', 'Command has been executed at least once and cannot be deleted.'),
+                'options' => ['class' => 'alert-error']
             ]);
         }
     }
@@ -145,7 +146,7 @@ class CommandController extends Controller {
 
         $userId = Yii::$app->user->identity->id;
         \d("user", $userId);
-        
+
         if (!$command->canExecute()) {
             throw new \yii\web\HttpException("The command requires approval before execution.");
         }
@@ -154,24 +155,24 @@ class CommandController extends Controller {
         \d($task->attributes);
         if ($task->result_status == TaskExecution::STATUS_SUCCESS) {
             Yii::$app->session->setFlash('alert', [
-                'body'=>\Yii::t('backend', 'The command has been executed succesfully.'),
-                'options'=>['class'=>'alert-success']
+                'body' => \Yii::t('backend', 'The command has been executed succesfully.'),
+                'options' => ['class' => 'alert-success']
             ]);
         } else {
             Yii::$app->session->setFlash('alert', [
-                'body'=>\Yii::t('backend', 'The command didn\'t execute correctly.'),
-                'options'=>['class'=>'alert-error']
+                'body' => \Yii::t('backend', 'The command didn\'t execute correctly.'),
+                'options' => ['class' => 'alert-error']
             ]);
         }
-        
+
         if (!Yii::$app->request->isAjax) {
-            
-            $this->render('view', ['model' => $command]);
+
+            $this->redirect('view', ['id' => $command->id]);
         } else {
             echo "1";
         }
     }
-    
+
     /**
      * View task execution result
      * @param string $id
@@ -181,6 +182,22 @@ class CommandController extends Controller {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
         $this->render('task_view', ['model' => $model]);
+    }
+
+    public function actionApprove($id, $approved = 0) {
+        $command = $this->findModel($id);
+        $userId = \Yii::$app->user->identity->id;
+        $review = CommandReview::find()->where(['command_id' => $id, 'reviewer_id' => $userId])->one();
+        if (!$review) {
+            $review = new CommandReview();
+            $review->reviewer_id = $userId;
+            $review->command_id = $id;
+        }
+        $review->approved = $approved ? 1 : 0;
+        $review->save();
+        \d($review);
+        \d($review->errors);
+        echo "1";
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use backend\widgets\ClickGridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -16,8 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo Html::a('Create Command', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php echo GridView::widget([
+    <?php echo ClickGridView::widget([
         'dataProvider' => $dataProvider,
+        'clickTarget' => 'command',
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
@@ -44,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'header' => 'Approved',
                 'value' => function($data) {
-                    return "nope";
+                    return $data->isApproved() ? 'Yes' : 'No';
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
