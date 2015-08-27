@@ -12,6 +12,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use common\behaviors\GuidBehavior;
 use common\behaviors\AuditBehavior;
+use rmrevin\yii\module\Comments\interfaces\CommentatorInterface;
+use yii\helpers\Html;
 
 /**
  * User model
@@ -30,7 +32,7 @@ use common\behaviors\AuditBehavior;
  * @property integer $logged_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends ActiveRecord implements IdentityInterface, CommentatorInterface {
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
@@ -316,6 +318,18 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function getName() {
         return $this->full_name ? $this->full_name : $this->username;
+    }
+
+    public function getCommentatorName(){
+        return $this->getName();
+    }
+
+    public function getCommentatorAvatar() {
+        return Yii::$app->urlManager->createUrl('/img/user.jpg');
+    }
+
+    public function getCommentatorUrl() {
+        return null;
     }
 
 }

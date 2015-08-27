@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use backend\widgets\ClickGridView;
+use rmrevin\yii\module\Comments;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Command */
@@ -66,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 <div class="command-results">
-    <h2>Results</h2>
+    <h3>Results</h3>
     <?php echo ClickGridView::widget([
         'dataProvider' => $results,
         'clickTarget' => 'task',
@@ -104,6 +105,13 @@ $this->params['breadcrumbs'][] = $this->title;
             
         ],
     ]); ?>
+</div>
+<div>
+    <?php
+    echo Comments\widgets\CommentListWidget::widget([
+    'entity' => (string) 'command-' . $model->id, // type and id
+    ]);
+    ?>
 </div>
 <?php
 $this->registerJs('
