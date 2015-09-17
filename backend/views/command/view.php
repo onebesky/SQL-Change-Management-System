@@ -15,14 +15,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary', 'style' => 'margin-right: 16px;']);
+        echo Html::a('Update', ['update', 'id' => $model->id], [
+            'class' => 'btn btn-primary',
+            'style' => 'margin-right: 16px;'
+        ]);
         if ($model->canExecute(\Yii::$app->user->identity)) {
-           /* echo Html::a('Execute', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-warning',
-                'data' => [
-                    'method' => 'post',
-                ],
-            ]);*/
+            /* echo Html::a('Execute', ['delete', 'id' => $model->id], [
+              'class' => 'btn btn-warning',
+              'data' => [
+              'method' => 'post',
+              ],
+              ]); */
             echo yii\bootstrap\Button::widget([
                 'label' => 'Execute now',
                 'options' => ['class' => 'btn-warning', 'id' => 'execute-button']
@@ -31,17 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
         if ($model->canDelete()) {
             echo Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
+                'style' => 'margin-left: 16px;',
                 'data' => [
                     'confirm' => 'Are you sure you want to delete this command?',
                     'method' => 'post',
                 ],
             ]);
         }
-        
+
         echo yii\bootstrap\Button::widget([
-                'label' => 'Approve',
-                'options' => ['class' => 'pull-right', 'id' => 'approve-button']
-            ]);
+            'label' => 'Approve',
+            'options' => ['class' => 'pull-right', 'id' => 'approve-button']
+        ]);
         ?>
     </p>
 
@@ -67,7 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="command-results">
     <h2>Results</h2>
-    <?php echo ClickGridView::widget([
+    <?php
+    echo ClickGridView::widget([
         'dataProvider' => $results,
         'clickTarget' => 'task',
         'columns' => [
@@ -75,8 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'execution_start:datetime',
             [
                 'label' => 'Duration',
-                'value' => function($data){
-                    if ($data->execution_end){
+                'value' => function($data) {
+                    if ($data->execution_end) {
                         return $data->execution_end - $data->execution_start . ' sec';
                     }
                 }
@@ -85,25 +90,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function($data) {
-    switch ($data->result_status) {
-        case \common\models\TaskExecution::STATUS_WAITING:
-            return '<span class="label label-inverse">Scheduled on ' . Yii::$app->formatter->asDate($data->scheduled_on) . '</span>';
-        case \common\models\TaskExecution::STATUS_UNKNOWN:
-            return '<span class="label">Unknown</span>';
-        case \common\models\TaskExecution::STATUS_SUCCESS:
-            return '<span class="label label-success">Success</span>';
-        case \common\models\TaskExecution::STATUS_ERROR:
-            return '<span class="label label-errr">Error</span>';
-        case \common\models\TaskExecution::STATUS_RUNNING:
-            return '<span class="label label-warning">Error</span>';
-    }
-    
-    return '<span class="label">n/a</span>';
+                    switch ($data->result_status) {
+                        case \common\models\TaskExecution::STATUS_WAITING:
+                            return '<span class="label label-inverse">Scheduled on ' . Yii::$app->formatter->asDate($data->scheduled_on) . '</span>';
+                        case \common\models\TaskExecution::STATUS_UNKNOWN:
+                            return '<span class="label">Unknown</span>';
+                        case \common\models\TaskExecution::STATUS_SUCCESS:
+                            return '<span class="label label-success">Success</span>';
+                        case \common\models\TaskExecution::STATUS_ERROR:
+                            return '<span class="label label-errr">Error</span>';
+                        case \common\models\TaskExecution::STATUS_RUNNING:
+                            return '<span class="label label-warning">Error</span>';
+                    }
+
+                    return '<span class="label">n/a</span>';
                 }
             ],
-            
         ],
-    ]); ?>
+    ]);
+    ?>
 </div>
 <?php
 $this->registerJs('
