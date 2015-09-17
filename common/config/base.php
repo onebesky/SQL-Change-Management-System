@@ -145,6 +145,13 @@ $config = [
             ],
             require(Yii::getAlias('@storage/config/_urlManager.php'))
         )
+    ],                      
+    'modules' => [
+        'comments' => [
+            'class' => 'rmrevin\yii\module\Comments\Module',
+            'userIdentityClass' => 'common\models\User',
+            'useRbac' => true,
+        ]
     ],
     'params' => [
         'adminEmail' => getenv('ADMIN_EMAIL'),
